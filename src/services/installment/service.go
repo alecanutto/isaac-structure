@@ -27,3 +27,7 @@ func (is InstallmentService) Create(installment structs.Installments) error {
 
 	return is.InstallmentRepository.Create(installment)
 }
+
+func (is InstallmentService) GetLastItem() (structs.Installments, error) {
+	return is.InstallmentRepository.GetLastItem()
+}

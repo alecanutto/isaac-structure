@@ -24,6 +24,7 @@ func NewInstallmentHandler(router fiber.Router, servContainer services.ServiceCo
 func (ih InstallmentHandler) SetRoutes() {
 	groupRouter := ih.router.Group("/installments")
 	groupRouter.Post("", ih.CreateInstallment)
+	groupRouter.Get("/last_item", ih.GetLastItem)
 }
 
 func (ih InstallmentHandler) CreateInstallment(ctx *fiber.Ctx) error {
@@ -46,4 +47,17 @@ func (ih InstallmentHandler) CreateInstallment(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusCreated).JSON(structs.Response{
 		Data: "Installment criado com sucesso",
 	})
+}
+
+func (ih InstallmentHandler) GetLastItem(ctx *fiber.Ctx) error {
+	item, err := ih.installmentService.GetLastItem()
+
+	if err != nil {
+		return ctx.Status(http.StatusInternalServerError).JSON(structs.Response{
+			Data: err.Error(),
+			Tag:  "INTERNAL_SERVER_ERROR",
+		})
+	}
+
+	return ctx.Status(http.StatusCreated).JSON(item)
 }

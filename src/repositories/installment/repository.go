@@ -18,3 +18,11 @@ func NewInstallmentRepository(db *gorm.DB) InstallmentRepository {
 func (ir InstallmentRepository) Create(installment structs.Installments) error {
 	return ir.db.Create(&installment).Error
 }
+
+func (ir InstallmentRepository) GetLastItem() (structs.Installments, error) {
+	var item structs.Installments
+
+	err := ir.db.Model(&structs.Installments{}).Last(&item).Error
+
+	return item, err
+}
